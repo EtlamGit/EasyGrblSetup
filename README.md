@@ -7,6 +7,10 @@ It is controlled by [Grbl](https://github.com/gnea/grbl/wiki) and has several pa
 This software GUI guides you through all steps necessary to get your machine running without too much accidents.
 
 
+## Platform compatibility
+This software is based on Qt/C++ and should therefore run on all operation systems that supports Qt version 5.
+
+
 ## Features
 * Automatically detect up to 6 axes
 * Show basic status of machine (position, status, pins, ...)
