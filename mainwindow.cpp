@@ -133,7 +133,7 @@ void MainWindow::handleTimer()
     if (ui->label_grbl_status->text() == "Idle") {
 
       // write configuration commands when available
-      while (m_configWatcher->isCommandAvailable()) {
+      if (m_configWatcher->isCommandAvailable()) {
         comWrite( m_configWatcher->getCommand().toUtf8() );
       }
 
@@ -146,7 +146,7 @@ void MainWindow::handleTimer()
 void MainWindow::handleJog()
 {
   double speed    = 60.0 * std::pow(10.0,ui->dial_jogspeed->value());
-  double distance = speed/(60.0*4.0);
+  double distance = speed/(60.0*4.0)*1.25;
 
   ui->label_jogspeed->setText(QString("%1\nmm/min").arg(speed));
 
@@ -817,13 +817,13 @@ void MainWindow::buttonSpeedTestX()
   if ((ui->label_grbl_status->text() == "Idle") &&
       (ui->checkBox_20->isChecked()) && (ui->checkBox_21->isChecked()) && (ui->checkBox_22->isChecked())) {
     int maxspeed = ui->doubleSpinBox_110X->value();
-    int speed = std::max(500, maxspeed - 5000);
+    int speed = std::max(500, maxspeed/2);
     int move  = 10 - ui->doubleSpinBox_130X->value();
-    comAppend("G1 X-10 F1000\n");
-    for (int i = 0; speed <= maxspeed; i++) {
-      comAppend(QString("G1 X%1 F%2\n").arg(move).arg(speed));
-      comAppend(QString("G1 X%1 F%2\n").arg(-10).arg(speed));
-      speed += 500;
+    comAppend("G53 G1 X-10 F1000\n");
+    while (speed <= maxspeed) {
+      comAppend(QString("G53 G1 X%1 F%2\n").arg(move).arg(speed));
+      comAppend(QString("G53 G1 X%1 F%2\n").arg(-10).arg(speed));
+      speed += maxspeed/20;
     }
   }
 }
@@ -833,13 +833,13 @@ void MainWindow::buttonSpeedTestY()
   if ((ui->label_grbl_status->text() == "Idle") &&
       (ui->checkBox_20->isChecked()) && (ui->checkBox_21->isChecked()) && (ui->checkBox_22->isChecked())) {
     int maxspeed = ui->doubleSpinBox_110Y->value();
-    int speed = std::max(500, maxspeed - 5000);
+    int speed = std::max(500, maxspeed/2);
     int move  = 10 - ui->doubleSpinBox_130Y->value();
-    comAppend("G1 Y-10 F1000\n");
-    for (int i = 0; speed <= maxspeed; i++) {
-      comAppend(QString("G1 Y%1 F%2\n").arg(move).arg(speed));
-      comAppend(QString("G1 Y%1 F%2\n").arg(-10).arg(speed));
-      speed += 500;
+    comAppend("G53 G1 Y-10 F1000\n");
+    while (speed <= maxspeed) {
+      comAppend(QString("G53 G1 Y%1 F%2\n").arg(move).arg(speed));
+      comAppend(QString("G53 G1 Y%1 F%2\n").arg(-10).arg(speed));
+      speed += maxspeed/20;
     }
   }
 }
@@ -849,13 +849,13 @@ void MainWindow::buttonSpeedTestZ()
   if ((ui->label_grbl_status->text() == "Idle") &&
       (ui->checkBox_20->isChecked()) && (ui->checkBox_21->isChecked()) && (ui->checkBox_22->isChecked())) {
     int maxspeed = ui->doubleSpinBox_110Z->value();
-    int speed = std::max(500, maxspeed - 5000);
+    int speed = std::max(500, maxspeed/2);
     int move  = 10 - ui->doubleSpinBox_130Z->value();
-    comAppend("G1 Z-10 F1000\n");
-    for (int i = 0; speed <= maxspeed; i++) {
-      comAppend(QString("G1 Z%1 F%2\n").arg(move).arg(speed));
-      comAppend(QString("G1 Z%1 F%2\n").arg(-10).arg(speed));
-      speed += 500;
+    comAppend("G53 G1 Z-10 F1000\n");
+    while (speed <= maxspeed) {
+      comAppend(QString("G53 G1 Z%1 F%2\n").arg(move).arg(speed));
+      comAppend(QString("G53 G1 Z%1 F%2\n").arg(-10).arg(speed));
+      speed += maxspeed/20;
     }
   }
 }
@@ -865,13 +865,13 @@ void MainWindow::buttonSpeedTestA()
   if ((ui->label_grbl_status->text() == "Idle") &&
       (ui->checkBox_20->isChecked()) && (ui->checkBox_21->isChecked()) && (ui->checkBox_22->isChecked())) {
     int maxspeed = ui->doubleSpinBox_110A->value();
-    int speed = std::max(500, maxspeed - 5000);
+    int speed = std::max(500, maxspeed/2);
     int move  = 10 - ui->doubleSpinBox_130A->value();
-    comAppend("G1 A-10 F1000\n");
-    for (int i = 0; speed <= maxspeed; i++) {
-      comAppend(QString("G1 A%1 F%2\n").arg(move).arg(speed));
-      comAppend(QString("G1 A%1 F%2\n").arg(-10).arg(speed));
-      speed += 500;
+    comAppend("G53 G1 A-10 F1000\n");
+    while (speed <= maxspeed) {
+      comAppend(QString("G53 G1 A%1 F%2\n").arg(move).arg(speed));
+      comAppend(QString("G53 G1 A%1 F%2\n").arg(-10).arg(speed));
+      speed += maxspeed/20;
     }
   }
 }
@@ -881,13 +881,13 @@ void MainWindow::buttonSpeedTestB()
   if ((ui->label_grbl_status->text() == "Idle") &&
       (ui->checkBox_20->isChecked()) && (ui->checkBox_21->isChecked()) && (ui->checkBox_22->isChecked())) {
     int maxspeed = ui->doubleSpinBox_110B->value();
-    int speed = std::max(500, maxspeed - 5000);
+    int speed = std::max(500, maxspeed/2);
     int move  = 10 - ui->doubleSpinBox_130B->value();
-    comAppend("G1 B-10 F1000\n");
-    for (int i = 0; speed <= maxspeed; i++) {
-      comAppend(QString("G1 B%1 F%2\n").arg(move).arg(speed));
-      comAppend(QString("G1 B%1 F%2\n").arg(-10).arg(speed));
-      speed += 500;
+    comAppend("G53 G1 B-10 F1000\n");
+    while (speed <= maxspeed) {
+      comAppend(QString("G53 G1 B%1 F%2\n").arg(move).arg(speed));
+      comAppend(QString("G53 G1 B%1 F%2\n").arg(-10).arg(speed));
+      speed += maxspeed/20;
     }
   }
 }
@@ -897,13 +897,13 @@ void MainWindow::buttonSpeedTestC()
   if ((ui->label_grbl_status->text() == "Idle") &&
       (ui->checkBox_20->isChecked()) && (ui->checkBox_21->isChecked()) && (ui->checkBox_22->isChecked())) {
     int maxspeed = ui->doubleSpinBox_110C->value();
-    int speed = std::max(500, maxspeed - 5000);
+    int speed = std::max(500, maxspeed/2);
     int move  = 10 - ui->doubleSpinBox_130C->value();
-    comAppend("G1 C-10 F1000\n");
-    for (int i = 0; speed <= maxspeed; i++) {
-      comAppend(QString("G1 C%1 F%2\n").arg(move).arg(speed));
-      comAppend(QString("G1 C%1 F%2\n").arg(-10).arg(speed));
-      speed += 500;
+    comAppend("G53 G1 C-10 F1000\n");
+    while (speed <= maxspeed) {
+      comAppend(QString("G53 G1 C%1 F%2\n").arg(move).arg(speed));
+      comAppend(QString("G53 G1 C%1 F%2\n").arg(-10).arg(speed));
+      speed += maxspeed/20;
     }
   }
 }
