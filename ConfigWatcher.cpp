@@ -235,13 +235,15 @@ bool ConfigWatcher::isConfigured()
 
 bool ConfigWatcher::isCommandAvailable()
 {
-  if (!m_axes_query_send) { // first commands with unknown axes configuration => axes query
-    m_commands.append(QString("G1 X%1 F100\n").arg(ui->doubleSpinBox_MposX->value()));
-    m_commands.append(QString("G1 Y%1 F100\n").arg(ui->doubleSpinBox_MposY->value()));
-    m_commands.append(QString("G1 Z%1 F100\n").arg(ui->doubleSpinBox_MposZ->value()));
-    m_commands.append(QString("G1 A%1 F100\n").arg(ui->doubleSpinBox_MposA->value()));
-    m_commands.append(QString("G1 B%1 F100\n").arg(ui->doubleSpinBox_MposB->value()));
-    m_commands.append(QString("G1 C%1 F100\n").arg(ui->doubleSpinBox_MposC->value()));
+  if (!m_axes_query_send) {
+    // first commands with unknown axes configuration
+    // => try to move axes to current position and observe response
+    m_commands.append(QString("G53 G1 X%1 F100 (EasyGrblSetup query axis X)\n").arg(ui->doubleSpinBox_MposX->value()));
+    m_commands.append(QString("G53 G1 Y%1 F100 (EasyGrblSetup query axis Y)\n").arg(ui->doubleSpinBox_MposY->value()));
+    m_commands.append(QString("G53 G1 Z%1 F100 (EasyGrblSetup query axis Z)\n").arg(ui->doubleSpinBox_MposZ->value()));
+    m_commands.append(QString("G53 G1 A%1 F100 (EasyGrblSetup query axis A)\n").arg(ui->doubleSpinBox_MposA->value()));
+    m_commands.append(QString("G53 G1 B%1 F100 (EasyGrblSetup query axis B)\n").arg(ui->doubleSpinBox_MposB->value()));
+    m_commands.append(QString("G53 G1 C%1 F100 (EasyGrblSetup query axis C)\n").arg(ui->doubleSpinBox_MposC->value()));
     m_status_count = 0;
     m_commands.append("$$\n");
     m_axes_query_send = true;
