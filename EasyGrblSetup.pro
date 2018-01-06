@@ -14,11 +14,11 @@ TEMPLATE = app
 
 CONFIG += c++11
 
-SOURCES += main.cpp\
-           mainwindow.cpp \
-    ConfigWatcher.cpp
+SOURCES += source/main.cpp \
+           source/mainwindow.cpp \
+           source/ConfigWatcher.cpp
 
-HEADERS  += mainwindow.h \
-    ConfigWatcher.h
+HEADERS  += source/mainwindow.h \
+            source/ConfigWatcher.h
 
-FORMS    += mainwindow.ui
+FORMS    += source/mainwindow.ui

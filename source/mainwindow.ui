@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1374</width>
-    <height>1056</height>
+    <width>1280</width>
+    <height>900</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,6 +17,9 @@
    <layout class="QHBoxLayout" name="horizontalLayout">
     <property name="sizeConstraint">
      <enum>QLayout::SetDefaultConstraint</enum>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
     </property>
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_com">
@@ -3544,6 +3547,9 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
       <property name="verticalScrollBarPolicy">
        <enum>Qt::ScrollBarAsNeeded</enum>
       </property>
@@ -3567,11 +3573,23 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>546</width>
-         <height>1138</height>
+         <width>514</width>
+         <height>883</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
         <item>
          <widget class="QGroupBox" name="groupBox">
           <property name="sizePolicy">
