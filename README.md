@@ -12,6 +12,7 @@ This software is based on Qt/C++ and should therefore run on all operation syste
 
 
 ## Features
+* Cross platform
 * Automatically detect up to 6 axes
 * Show basic status of machine (position, status, pins, ...)
 * Configure 30+ parameters in human readable form
@@ -21,6 +22,6 @@ This software is based on Qt/C++ and should therefore run on all operation syste
 
 ## License
 * You are free to use this software for private purpose.
-* I guaranty for nothing: functionality, physical damage, injury or harm you may take.
+* I guarantee for nothing: functionality, physical damage, injury or harm you may take.
 * In case you want to use this software in commercial environment, contact me.
 * Redistribution of code is not permitted.

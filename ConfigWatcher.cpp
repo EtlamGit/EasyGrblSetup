@@ -6,6 +6,10 @@
 #include <QStringList>
 #include <QObjectList>
 
+#if QT_VERSION < 0x050700
+  #include "qt_before_5_7_0.h"  // QOverload
+#endif
+
 
 ConfigWatcher::ConfigWatcher(Ui::MainWindow *pui)
   : ui(pui)
@@ -50,7 +54,7 @@ ConfigWatcher::ConfigWatcher(Ui::MainWindow *pui)
            this,            &ConfigWatcher::updateConfig6);
 
   connect( ui->spinBox_10, QOverload<int>::of(&QSpinBox::valueChanged),
-           this,          &ConfigWatcher::updateConfig10);
+           this,           &ConfigWatcher::updateConfig10);
 
   connect( ui->doubleSpinBox_11, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
            this,                 &ConfigWatcher::updateConfig11);

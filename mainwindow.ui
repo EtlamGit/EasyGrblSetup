@@ -159,7 +159,7 @@
               <enum>QFrame::Panel</enum>
              </property>
              <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
+              <enum>QFrame::Sunken</enum>
              </property>
              <property name="text">
               <string>?</string>
@@ -2672,6 +2672,9 @@
            </item>
            <item>
             <widget class="QDoubleSpinBox" name="doubleSpinBox_27">
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
              <property name="minimum">
               <double>0.010000000000000</double>
              </property>
@@ -3564,8 +3567,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>623</width>
-         <height>1016</height>
+         <width>546</width>
+         <height>1138</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
