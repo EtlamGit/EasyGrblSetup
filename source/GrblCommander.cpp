@@ -85,8 +85,12 @@ bool GrblCommander::sendRealtime(char command)
 
 void GrblCommander::appendCommand(QString command)
 {
+  // ignore empty lines
+  if (command.length() == 0)
+    return;
+
   // append "line feed" if missing
-  if (command.right(1) != "\n")
+  if (!command.endsWith("\n"))
     command.append('\n');
 
   // append command to command queue
@@ -110,8 +114,8 @@ void GrblCommander::writeCommands()
 
     // remove comment and spaces at end
     command.remove(QRegExp("\\((.*)\\)"));
-    while (command[command.length()-2] == ' ')
-      command.remove(command.length()-2,1);
+    while (command.endsWith(' '))
+      command.chop(1);
 
     // filter command for forbidden characters
     command = command.toUtf8();
