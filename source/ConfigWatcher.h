@@ -8,7 +8,7 @@
 
 
 namespace Ui {
-  class MainWindow;
+  class EasyGrblSetup;
 }
 
 class ConfigWatcher : public QObject
@@ -16,23 +16,17 @@ class ConfigWatcher : public QObject
   Q_OBJECT
 
 public:
-  explicit ConfigWatcher(Ui::MainWindow *pui);
+  explicit ConfigWatcher(Ui::EasyGrblSetup *pui);
   ~ConfigWatcher();
 
-  bool    isConfigured();
-  bool    isCommandAvailable();
-  QString getCommand();
+signals:
+  void writeConfigCommand(QString command);
 
 public slots:
-//  void setEnabled(bool flag);
-//  void resetAxisIndex();
   void reset();
-  void setAxisIndex(int axis, int value);
+  void setAxis(int axis, bool flag);
 
-  bool handleAxesQueryOk();
-  bool handleAxesQueryError();
-
-  void parseGrblConfig(QString line);
+  void parseGrblSetting(QString line);
 
 private slots:
   void updateConfig0();
@@ -83,26 +77,13 @@ private slots:
   void updateConfig130B();
   void updateConfig130C();
 
-  void appendConfig(int pnum, int value);
-  void appendConfig(int pnum, double value);
-
-  void setVisibleX(bool flag);
-  void setVisibleY(bool flag);
-  void setVisibleZ(bool flag);
-  void setVisibleA(bool flag);
-  void setVisibleB(bool flag);
-  void setVisibleC(bool flag);
+  void writeConfig(int pnum, int value);
+  void writeConfig(int pnum, double value);
 
 private:
-  Ui::MainWindow *ui;
-  bool           m_axes_configured;  // flag if axes are configured
-  bool           m_axes_query_send;  // flag if axes query commmands are send
-  bool           m_axes_query;       // flag if axes query is running
-  int            m_axes_test;        // number which axis is tested at the moment
-  int            m_reg_num;          // number of axes estimated for machine
-  bool           m_enabled;          // flag to temporarily disable when reading a config
-  QStringList    m_commands;         // buffer for config write commands
-  int            m_status_count;     // counter to query config only every Nth status update
+  Ui::EasyGrblSetup *ui;
+  bool              m_enabled;       // flag to temporarily disable when reading a config
+  bool              m_axes[6];       // flag if the axis is enabled
 
 public:
   int m_reg2axes[6];                 // axes number for 6 possible register numbers (reg num in => axes num out)

@@ -15,10 +15,18 @@ TEMPLATE = app
 CONFIG += c++11
 
 SOURCES += source/main.cpp \
-           source/mainwindow.cpp \
-           source/ConfigWatcher.cpp
+           source/EasyGrblSetup.cpp \
+           source/ConfigWatcher.cpp \
+           source/GrblCommander.cpp \
+           source/JogController.cpp \
+    source/AxesVisibility.cpp
 
-HEADERS  += source/mainwindow.h \
-            source/ConfigWatcher.h
+HEADERS  += source/EasyGrblSetup.h \
+            source/qt_before_5_7_0.h \
+            source/QLabelClickable.h \
+            source/ConfigWatcher.h \
+            source/GrblCommander.h \
+            source/JogController.h \
+    source/AxesVisibility.h
 
-FORMS    += source/mainwindow.ui
+FORMS    += source/EasyGrblSetup.ui
