@@ -132,6 +132,8 @@ private slots:
 
   // handle stuff at regular timer (every 250ms)
   void handleTimer();
+  void handleFirstConnect();
+  void requestFirstStatus();
 
   // parse received stuff
   void parseLine(const QString &line);

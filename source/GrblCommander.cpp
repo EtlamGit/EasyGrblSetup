@@ -4,7 +4,7 @@
 #include "ui_EasyGrblSetup.h"
 
 #include <QSerialPortInfo>
-
+#include <QMessageBox>
 
 GrblCommander::GrblCommander(Ui::EasyGrblSetup *ui)
   : ui(ui)
@@ -25,10 +25,6 @@ GrblCommander::GrblCommander(Ui::EasyGrblSetup *ui)
            this,          &GrblCommander::comHandleReadyRead);
 //  connect( &m_serialPort, &QSerialPort::errorOccured,
 //           this,          &SerialCommands::comHandleError);
-
-  // timer
-  connect( &m_timer, &QTimer::timeout,
-           this,     &GrblCommander::handleTimer );
 }
 
 
@@ -47,7 +43,42 @@ void GrblCommander::handleTimer()
       appendCommand("$G (no-logging)");  // request gcode parser state
     }
   } else
-    comDisconnect();
+    ui->toolButton_disconnect->click();
+}
+
+void GrblCommander::handleFirstConnect()
+{
+  if (m_grblFound) {
+    requestFirstStatus();
+  } else {
+    QMessageBox msgBox;
+    msgBox.setIcon(QMessageBox::Warning);
+    msgBox.setText("No grbl controller found!");
+    msgBox.setInformativeText("For safety reasons no communication is send via COM until this message is received.\nYou can disable this on your own risk.");
+    QAbstractButton* pUnsafe = msgBox.addButton(tr("Unsafe"), QMessageBox::YesRole);
+    msgBox.addButton(QMessageBox::Ok);
+    msgBox.exec();
+    if (msgBox.clickedButton() == pUnsafe) {
+      m_grblFound = true;
+      requestFirstStatus();
+    } else
+      ui->toolButton_disconnect->click();
+  }
+}
+
+void GrblCommander::requestFirstStatus()
+{
+  // reconnect timer
+  disconnect(&m_timer, 0, 0, 0);
+  connect( &m_timer, &QTimer::timeout,
+           this,     &GrblCommander::handleTimer );
+  m_timer.start(250);
+
+  sendRealtime('?');    // request first status
+  appendCommand("$I (no-logging)");  // request build info
+  appendCommand("$$ (no-logging)");  // request settings
+  appendCommand("$G (no-logging)");  // request gcode parser state
+  appendCommand("$# (no-logging)");  // request gcode parameters
 }
 
 
@@ -188,9 +219,9 @@ bool GrblCommander::comConnect()
   m_serialPort.setStopBits( QSerialPort::OneStop );
 
   if (m_serialPort.open(QIODevice::ReadWrite)) {
-    ui->toolButton_rescan ->setVisible(false);
-    ui->comboBox_com      ->setVisible(false);
-    ui->toolButton_connect->setVisible(false);
+    ui->toolButton_rescan   ->setVisible(false);
+    ui->comboBox_com        ->setVisible(false);
+    ui->toolButton_connect  ->setVisible(false);
 
     ui->label_grbl_version   ->setVisible(true);
     ui->label_grbl_buffer    ->setVisible(true);
@@ -203,7 +234,12 @@ bool GrblCommander::comConnect()
 
     m_grblFound = false;
 
-    m_timer.start(250);
+    // timer
+    disconnect(&m_timer, 0, 0, 0);
+    connect( &m_timer, &QTimer::timeout,
+             this,     &GrblCommander::handleFirstConnect );
+    m_timer.start(500);
+
     return true;
   }
 
@@ -213,6 +249,7 @@ bool GrblCommander::comConnect()
 
 void GrblCommander::comDisconnect()
 {
+  disconnect(&m_timer, 0, 0, 0);
   m_timer.stop();
   m_serialPort.close();
 
@@ -220,9 +257,10 @@ void GrblCommander::comDisconnect()
   ui->label_grbl_buffer    ->setVisible(false);
   ui->toolButton_disconnect->setVisible(false);
 
-  ui->toolButton_rescan ->setVisible(true);
-  ui->comboBox_com      ->setVisible(true);
-  ui->toolButton_connect->setVisible(true);
+
+  ui->toolButton_rescan   ->setVisible(true);
+  ui->comboBox_com        ->setVisible(true);
+  ui->toolButton_connect  ->setVisible(true);
 
   ui->groupBox_status->setDisabled(true);
   ui->groupBox_jog   ->setDisabled(true);
@@ -322,17 +360,13 @@ void GrblCommander::parseLine(const QString &line)
   if (line.left(1) == "$")      return parseSetting (line);
   if (line.left(1) == "[")      return parseMessage(line);
 
-  // output all the rest to log ...
-  if (line.left(5) == "Grbl " && line.contains("['$' for help]")) {
+  // search for welcome message
+  if (line.startsWith("Grbl") && line.contains("['$' for help]")) {
     // grbl welcome message => reqeust some more information
     m_grblFound = true;
-    sendRealtime('?');    // request first status
-    appendCommand("$I (no-logging)");  // request build info
-    appendCommand("$$ (no-logging)");  // request settings
-    appendCommand("$G (no-logging)");  // request gcode parser state
-    appendCommand("$# (no-logging)");  // request gcode parameters
   }
 
+  // output all the rest to log ...
   emit receivedMessage(line);
 }
 
