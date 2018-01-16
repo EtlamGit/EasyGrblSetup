@@ -34,25 +34,25 @@ EasyGrblSetup::EasyGrblSetup(QWidget *parent)
            m_grblCom,       &GrblCommander::appendCommand);
 
   // buttons: Connect & Disconnect & Rescan
-  connect( ui->toolButton_connect,    &QToolButton::pressed,
+  connect( ui->toolButton_connect,    &QToolButton::clicked,
            this,                      &EasyGrblSetup::buttonConnect);
-  connect( ui->toolButton_disconnect, &QToolButton::pressed,
+  connect( ui->toolButton_disconnect, &QToolButton::clicked,
            this,                      &EasyGrblSetup::buttonDisconnect);
-  connect( ui->toolButton_rescan,     &QToolButton::pressed,
+  connect( ui->toolButton_rescan,     &QToolButton::clicked,
            m_grblCom,                 &GrblCommander::comRescan);
 
   // buttons: Unlock & Home
-  connect( ui->toolButton_unlock,     &QToolButton::pressed,
+  connect( ui->toolButton_unlock,     &QToolButton::clicked,
            this,                      &EasyGrblSetup::buttonUnlock);
-  connect( ui->toolButton_home,       &QToolButton::pressed,
+  connect( ui->toolButton_home,       &QToolButton::clicked,
            this,                      &EasyGrblSetup::buttonHome);
 
   // buttons: Rest & Hold & Resume
-  connect( ui->toolButton_reset,      &QToolButton::pressed,
+  connect( ui->toolButton_reset,      &QToolButton::clicked,
            this,                      &EasyGrblSetup::buttonReset);
-  connect( ui->toolButton_hold,       &QToolButton::pressed,
+  connect( ui->toolButton_hold,       &QToolButton::clicked,
            this,                      &EasyGrblSetup::buttonHold);
-  connect( ui->toolButton_resume,     &QToolButton::pressed,
+  connect( ui->toolButton_resume,     &QToolButton::clicked,
            this,                      &EasyGrblSetup::buttonResume);
 
   // logging
@@ -86,56 +86,56 @@ EasyGrblSetup::EasyGrblSetup(QWidget *parent)
 
 
   // connect test buttons
-  connect( ui->pushButton_softlimit_enable,  &QPushButton::pressed,
+  connect( ui->pushButton_softlimit_enable,  &QPushButton::clicked,
            this,                             &EasyGrblSetup::buttonEnableSoftlimit );
-  connect( ui->pushButton_softlimit_disable, &QPushButton::pressed,
+  connect( ui->pushButton_softlimit_disable, &QPushButton::clicked,
            this,                             &EasyGrblSetup::buttonDisableSoftlimit );
-  connect( ui->pushButton_hardlimit_enable,  &QPushButton::pressed,
+  connect( ui->pushButton_hardlimit_enable,  &QPushButton::clicked,
            this,                             &EasyGrblSetup::buttonEnableHardlimit );
-  connect( ui->pushButton_hardlimit_disable, &QPushButton::pressed,
+  connect( ui->pushButton_hardlimit_disable, &QPushButton::clicked,
            this,                             &EasyGrblSetup::buttonDisableHardlimit );
-  connect( ui->pushButton_homing_enable,     &QPushButton::pressed,
+  connect( ui->pushButton_homing_enable,     &QPushButton::clicked,
            this,                             &EasyGrblSetup::buttonEnableHoming );
-  connect( ui->pushButton_homing_disable,    &QPushButton::pressed,
+  connect( ui->pushButton_homing_disable,    &QPushButton::clicked,
            this,                             &EasyGrblSetup::buttonDisableHoming );
 
-  connect( ui->pushButton_testX, &QPushButton::pressed,
+  connect( ui->pushButton_testX, &QPushButton::clicked,
            this,                 &EasyGrblSetup::buttonDirectionTestX );
-  connect( ui->pushButton_testY, &QPushButton::pressed,
+  connect( ui->pushButton_testY, &QPushButton::clicked,
            this,                 &EasyGrblSetup::buttonDirectionTestY );
-  connect( ui->pushButton_testZ, &QPushButton::pressed,
+  connect( ui->pushButton_testZ, &QPushButton::clicked,
            this,                 &EasyGrblSetup::buttonDirectionTestZ );
-  connect( ui->pushButton_testA, &QPushButton::pressed,
+  connect( ui->pushButton_testA, &QPushButton::clicked,
            this,                 &EasyGrblSetup::buttonDirectionTestA );
-  connect( ui->pushButton_testB, &QPushButton::pressed,
+  connect( ui->pushButton_testB, &QPushButton::clicked,
            this,                 &EasyGrblSetup::buttonDirectionTestB );
-  connect( ui->pushButton_testC, &QPushButton::pressed,
+  connect( ui->pushButton_testC, &QPushButton::clicked,
            this,                 &EasyGrblSetup::buttonDirectionTestC );
 
-  connect( ui->toolButton_homeX, &QPushButton::pressed,
+  connect( ui->toolButton_homeX, &QPushButton::clicked,
            this,                 &EasyGrblSetup::buttonHomeX );
-  connect( ui->toolButton_homeY, &QPushButton::pressed,
+  connect( ui->toolButton_homeY, &QPushButton::clicked,
            this,                 &EasyGrblSetup::buttonHomeY );
-  connect( ui->toolButton_homeZ, &QPushButton::pressed,
+  connect( ui->toolButton_homeZ, &QPushButton::clicked,
            this,                 &EasyGrblSetup::buttonHomeZ );
-  connect( ui->toolButton_homeA, &QPushButton::pressed,
+  connect( ui->toolButton_homeA, &QPushButton::clicked,
            this,                 &EasyGrblSetup::buttonHomeA );
-  connect( ui->toolButton_homeB, &QPushButton::pressed,
+  connect( ui->toolButton_homeB, &QPushButton::clicked,
            this,                 &EasyGrblSetup::buttonHomeB );
-  connect( ui->toolButton_homeC, &QPushButton::pressed,
+  connect( ui->toolButton_homeC, &QPushButton::clicked,
            this,                 &EasyGrblSetup::buttonHomeC );
 
-  connect( ui->toolButton_speedX, &QPushButton::pressed,
+  connect( ui->toolButton_speedX, &QPushButton::clicked,
            this,                  &EasyGrblSetup::buttonSpeedTestX );
-  connect( ui->toolButton_speedY, &QPushButton::pressed,
+  connect( ui->toolButton_speedY, &QPushButton::clicked,
            this,                  &EasyGrblSetup::buttonSpeedTestY );
-  connect( ui->toolButton_speedZ, &QPushButton::pressed,
+  connect( ui->toolButton_speedZ, &QPushButton::clicked,
            this,                  &EasyGrblSetup::buttonSpeedTestZ );
-  connect( ui->toolButton_speedA, &QPushButton::pressed,
+  connect( ui->toolButton_speedA, &QPushButton::clicked,
            this,                  &EasyGrblSetup::buttonSpeedTestA );
-  connect( ui->toolButton_speedB, &QPushButton::pressed,
+  connect( ui->toolButton_speedB, &QPushButton::clicked,
            this,                  &EasyGrblSetup::buttonSpeedTestB );
-  connect( ui->toolButton_speedC, &QPushButton::pressed,
+  connect( ui->toolButton_speedC, &QPushButton::clicked,
            this,                  &EasyGrblSetup::buttonSpeedTestC );
 
   // setup status bar
@@ -247,6 +247,8 @@ void EasyGrblSetup::buttonConnect()
 void EasyGrblSetup::buttonDisconnect()
 {
   m_grblCom->comDisconnect();
+  ui->groupBox_config->setEnabled(false);
+  ui->scrollAreaWidgetContents->setEnabled(false);
 }
 
 void EasyGrblSetup::buttonUnlock()
