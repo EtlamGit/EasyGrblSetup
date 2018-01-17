@@ -25,6 +25,12 @@ GrblCommander::GrblCommander(Ui::EasyGrblSetup *ui)
            this,          &GrblCommander::comHandleReadyRead);
 //  connect( &m_serialPort, &QSerialPort::errorOccured,
 //           this,          &SerialCommands::comHandleError);
+
+  // setup timer
+  connect( &m_timer, &QTimer::timeout,
+           this,     &GrblCommander::handleTimer );
+  m_timer.setSingleShot(false);
+  m_timer.setInterval(250);
 }
 
 
@@ -68,11 +74,8 @@ void GrblCommander::handleFirstConnect()
 
 void GrblCommander::requestFirstStatus()
 {
-  // reconnect timer
-  disconnect(&m_timer, 0, 0, 0);
-  connect( &m_timer, &QTimer::timeout,
-           this,     &GrblCommander::handleTimer );
-  m_timer.start(250);
+  // start regular status timer
+  m_timer.start();
 
   sendRealtime('?');    // request first status
   appendCommand("$I (no-logging)");  // request build info
@@ -234,11 +237,8 @@ bool GrblCommander::comConnect()
 
     m_grblFound = false;
 
-    // timer
-    disconnect(&m_timer, 0, 0, 0);
-    connect( &m_timer, &QTimer::timeout,
-             this,     &GrblCommander::handleFirstConnect );
-    m_timer.start(500);
+    // setup single shot timer for first connect
+    QTimer::singleShot(500, this, &GrblCommander::handleFirstConnect);
 
     return true;
   }
@@ -249,7 +249,6 @@ bool GrblCommander::comConnect()
 
 void GrblCommander::comDisconnect()
 {
-  disconnect(&m_timer, 0, 0, 0);
   m_timer.stop();
   m_serialPort.close();
 
