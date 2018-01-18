@@ -132,7 +132,7 @@ private slots:
 
   // handle stuff at regular timer (every 250ms)
   void handleTimer();
-  void handleFirstConnect();
+  void handleConnectTimeout();
   void requestFirstStatus();
 
   // parse received stuff

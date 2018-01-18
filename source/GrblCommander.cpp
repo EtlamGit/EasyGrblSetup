@@ -40,23 +40,19 @@ GrblCommander::GrblCommander(Ui::EasyGrblSetup *ui)
 
 void GrblCommander::handleTimer()
 {
-  if (m_grblFound) {
-    requestStatus();
-    if (m_statusCounter++ < 40) {
-      writeCommands();
-    } else {
-      m_statusCounter = 0;
-      appendCommand("$G (no-logging)");  // request gcode parser state
-    }
-  } else
-    ui->toolButton_disconnect->click();
+  requestStatus();
+
+  if (m_statusCounter++ < 40) {
+    writeCommands();
+  } else {
+    m_statusCounter = 0;
+    appendCommand("$G (no-logging)");  // request gcode parser state
+  }
 }
 
-void GrblCommander::handleFirstConnect()
+void GrblCommander::handleConnectTimeout()
 {
-  if (m_grblFound) {
-    requestFirstStatus();
-  } else {
+  if (!m_grblFound) {
     QMessageBox msgBox;
     msgBox.setIcon(QMessageBox::Warning);
     msgBox.setText("No grbl controller found!");
@@ -237,8 +233,8 @@ bool GrblCommander::comConnect()
 
     m_grblFound = false;
 
-    // setup single shot timer for first connect
-    QTimer::singleShot(500, this, &GrblCommander::handleFirstConnect);
+    // setup single shot timer to detect timeout at connect
+    QTimer::singleShot(2000, this, &GrblCommander::handleConnectTimeout);
 
     return true;
   }
@@ -363,6 +359,7 @@ void GrblCommander::parseLine(const QString &line)
   if (line.startsWith("Grbl") && line.contains("['$' for help]")) {
     // grbl welcome message => reqeust some more information
     m_grblFound = true;
+    requestFirstStatus();
   }
 
   // output all the rest to log ...
