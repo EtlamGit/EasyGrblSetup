@@ -240,15 +240,11 @@ void EasyGrblSetup::decodeAlarm(int code)
 void EasyGrblSetup::buttonConnect()
 {
   m_grblCom->comConnect();
-  ui->groupBox_config->setEnabled(true);
-  ui->scrollAreaWidgetContents->setEnabled(true);
 }
 
 void EasyGrblSetup::buttonDisconnect()
 {
   m_grblCom->comDisconnect();
-  ui->groupBox_config->setEnabled(false);
-  ui->scrollAreaWidgetContents->setEnabled(false);
 }
 
 void EasyGrblSetup::buttonUnlock()

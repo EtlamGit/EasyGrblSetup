@@ -44,7 +44,7 @@ void GrblCommander::handleTimer()
 
   if (m_statusCounter++ < 40) {
     writeCommands();
-  } else {
+  } else if (ui->label_grbl_status->text() != "Home") {
     m_statusCounter = 0;
     appendCommand("$G (no-logging)");  // request gcode parser state
   }
@@ -78,6 +78,12 @@ void GrblCommander::requestFirstStatus()
   appendCommand("$$ (no-logging)");  // request settings
   appendCommand("$G (no-logging)");  // request gcode parser state
   appendCommand("$# (no-logging)");  // request gcode parameters
+
+  // enable GUI elements
+  ui->groupBox_status         ->setEnabled(true);
+  ui->groupBox_jog            ->setEnabled(true);
+  ui->groupBox_config         ->setEnabled(true);
+  ui->scrollAreaWidgetContents->setEnabled(true);
 }
 
 
@@ -226,15 +232,12 @@ bool GrblCommander::comConnect()
     ui->label_grbl_buffer    ->setVisible(true);
     ui->toolButton_disconnect->setVisible(true);
 
-    ui->groupBox_status->setDisabled(false);
-    ui->groupBox_jog   ->setDisabled(false);
-
     ui->plainTextEdit_log->clear();
 
     m_grblFound = false;
 
     // setup single shot timer to detect timeout at connect
-    QTimer::singleShot(2000, this, &GrblCommander::handleConnectTimeout);
+    QTimer::singleShot(5000, this, &GrblCommander::handleConnectTimeout);
 
     return true;
   }
@@ -257,8 +260,10 @@ void GrblCommander::comDisconnect()
   ui->comboBox_com        ->setVisible(true);
   ui->toolButton_connect  ->setVisible(true);
 
-  ui->groupBox_status->setDisabled(true);
-  ui->groupBox_jog   ->setDisabled(true);
+  ui->groupBox_status         ->setDisabled(true);
+  ui->groupBox_jog            ->setDisabled(true);
+  ui->groupBox_config         ->setDisabled(true);
+  ui->scrollAreaWidgetContents->setDisabled(true);
 
   ui->label_grbl_status->setText("?");
 
@@ -819,7 +824,7 @@ void GrblCommander::parseGrblStatusPins(const QString & status)
         ui->toolButton_resume->setDown(true);
         break;
       }
-    } else if (!status.contains(pin)) {
+    } else if (!status.contains(pin) && m_grblPins.contains(pin)) {
       // Pin deactivated
       m_grblPins.remove(pin);
       switch (pin.toLatin1()) {
