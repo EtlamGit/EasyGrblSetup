@@ -22,10 +22,12 @@ EasyGrblSetup::EasyGrblSetup(QWidget *parent)
 
 
   // axes identification
-  connect( m_grblCom,       &GrblCommander::foundAxis,
-           m_configWatcher, &ConfigWatcher::setAxis);
-  connect( m_grblCom,       &GrblCommander::foundAxis,
-           m_axesHide,      &AxesVisibility::axisEnable);
+  connect( m_grblCom,              &GrblCommander::foundAxis,
+           m_configWatcher,        &ConfigWatcher::setAxis);
+  connect( m_grblCom,              &GrblCommander::foundAxis,
+           m_axesHide,             &AxesVisibility::axisEnable);
+  connect( m_grblCom,              &GrblCommander::foundMachine,
+           ui->label_grbl_version, &QLabel::setText);
 
   // configuration updates
   connect( m_grblCom,       &GrblCommander::receivedSetting,
@@ -48,11 +50,11 @@ EasyGrblSetup::EasyGrblSetup(QWidget *parent)
            this,                      &EasyGrblSetup::buttonHome);
 
   // buttons: Rest & Hold & Resume
-  connect( ui->toolButton_reset,      &QToolButton::clicked,
+  connect( ui->pushButton_reset,      &QToolButton::clicked,
            this,                      &EasyGrblSetup::buttonReset);
-  connect( ui->toolButton_hold,       &QToolButton::clicked,
+  connect( ui->pushButton_hold,       &QToolButton::clicked,
            this,                      &EasyGrblSetup::buttonHold);
-  connect( ui->toolButton_resume,     &QToolButton::clicked,
+  connect( ui->pushButton_resume,     &QToolButton::clicked,
            this,                      &EasyGrblSetup::buttonResume);
 
   // logging

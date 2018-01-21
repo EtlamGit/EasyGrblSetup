@@ -91,6 +91,7 @@ public slots:
 
 signals: // for information gathered during connection, used for GUI setup
   void foundAxis(int index, bool flag);
+  void foundMachine(QString name);
 
 signals: // for all commands written (except some filtered)
   void writingCommand(QString command);

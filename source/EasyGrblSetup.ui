@@ -218,11 +218,11 @@
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_19">
+          <layout class="QHBoxLayout" name="horizontalLayout_7">
            <item>
-            <widget class="QToolButton" name="toolButton_reset">
+            <widget class="QPushButton" name="pushButton_reset">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -239,9 +239,9 @@
             </widget>
            </item>
            <item>
-            <widget class="QToolButton" name="toolButton_hold">
+            <widget class="QPushButton" name="pushButton_hold">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -258,9 +258,9 @@
             </widget>
            </item>
            <item>
-            <widget class="QToolButton" name="toolButton_resume">
+            <widget class="QPushButton" name="pushButton_resume">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>

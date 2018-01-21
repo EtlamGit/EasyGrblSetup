@@ -224,9 +224,9 @@ bool GrblCommander::comConnect()
   m_serialPort.setStopBits( QSerialPort::OneStop );
 
   if (m_serialPort.open(QIODevice::ReadWrite)) {
-    ui->toolButton_rescan   ->setVisible(false);
-    ui->comboBox_com        ->setVisible(false);
-    ui->toolButton_connect  ->setVisible(false);
+    ui->toolButton_rescan ->setVisible(false);
+    ui->comboBox_com      ->setVisible(false);
+    ui->toolButton_connect->setVisible(false);
 
     ui->label_grbl_version   ->setVisible(true);
     ui->label_grbl_buffer    ->setVisible(true);
@@ -255,10 +255,9 @@ void GrblCommander::comDisconnect()
   ui->label_grbl_buffer    ->setVisible(false);
   ui->toolButton_disconnect->setVisible(false);
 
-
-  ui->toolButton_rescan   ->setVisible(true);
-  ui->comboBox_com        ->setVisible(true);
-  ui->toolButton_connect  ->setVisible(true);
+  ui->toolButton_rescan ->setVisible(true);
+  ui->comboBox_com      ->setVisible(true);
+  ui->toolButton_connect->setVisible(true);
 
   ui->groupBox_status         ->setDisabled(true);
   ui->groupBox_jog            ->setDisabled(true);
@@ -438,16 +437,16 @@ void GrblCommander::parseMessage(const QString &line)
       QString version   = line.mid(1,line.length()-2).split(',').at(0).split(':').at(1);
       QString builddate = line.mid(1,line.length()-2).split(',').at(1).split(':').at(1);
       if (builddate.length()>10) {
-        ui->label_grbl_version->setText(builddate.right(builddate.length()-10));
+        emit foundMachine(builddate.right(builddate.length()-10));
       } else {
-        ui->label_grbl_version->setText(version+"."+builddate.mid(6,4) + builddate.mid(3,2) + builddate.left(2));
+        emit foundMachine(version + "." + builddate.mid(6,4) + builddate.mid(3,2) + builddate.left(2));
       }
     } else {
       // [VER:1.1f3.YYYYMMDD:optionalString]
       if (message.at(2).length() > 0) {
-        ui->label_grbl_version->setText(message.at(2));
+        emit foundMachine(message.at(2));
       } else {
-        ui->label_grbl_version->setText(message.at(1));
+        emit foundMachine(message.at(1));
       }
     }
     emit receivedMessage(line);
@@ -812,16 +811,16 @@ void GrblCommander::parseGrblStatusPins(const QString & status)
         break;
 
       case 'H':
-        ui->toolButton_hold->setStyleSheet("QToolButton { background-color:cornflowerblue; }");
-        ui->toolButton_hold->setDown(true);
+        ui->pushButton_hold->setStyleSheet("QPushButton { background-color:cornflowerblue; }");
+        ui->pushButton_hold->setDown(true);
         break;
       case 'R':
-        ui->toolButton_reset->setStyleSheet("QToolButton { background-color:orangered; }");
-        ui->toolButton_reset->setDown(true);
+        ui->pushButton_reset->setStyleSheet("QPushButton { background-color:orangered; }");
+        ui->pushButton_reset->setDown(true);
         break;
       case 'S':
-        ui->toolButton_resume->setStyleSheet("QToolButton { background-color:limegreen; }");
-        ui->toolButton_resume->setDown(true);
+        ui->pushButton_resume->setStyleSheet("QPushButton { background-color:limegreen; }");
+        ui->pushButton_resume->setDown(true);
         break;
       }
     } else if (!status.contains(pin) && m_grblPins.contains(pin)) {
@@ -859,16 +858,16 @@ void GrblCommander::parseGrblStatusPins(const QString & status)
         break;
 
       case 'H':
-        ui->toolButton_hold->setStyleSheet("");
-        ui->toolButton_hold->setDown(false);
+        ui->pushButton_hold->setStyleSheet("");
+        ui->pushButton_hold->setDown(false);
         break;
       case 'R':
-        ui->toolButton_reset->setStyleSheet("");
-        ui->toolButton_reset->setDown(false);
+        ui->pushButton_reset->setStyleSheet("");
+        ui->pushButton_reset->setDown(false);
         break;
       case 'S':
-        ui->toolButton_resume->setStyleSheet("");
-        ui->toolButton_resume->setDown(false);
+        ui->pushButton_resume->setStyleSheet("");
+        ui->pushButton_resume->setDown(false);
         break;
       }
     }
