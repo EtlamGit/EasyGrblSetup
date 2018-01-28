@@ -62,7 +62,7 @@ void GrblCommander::handleConnectTimeout()
     msgBox.exec();
     if (msgBox.clickedButton() == pUnsafe) {
       m_grblFound = true;
-      requestFirstStatus();
+      sendRealtime('\x18'); // soft reset
     } else
       ui->toolButton_disconnect->click();
   }
@@ -224,6 +224,8 @@ bool GrblCommander::comConnect()
   m_serialPort.setStopBits( QSerialPort::OneStop );
 
   if (m_serialPort.open(QIODevice::ReadWrite)) {
+    m_serialPort.setDataTerminalReady(true);  // force Arduino Reset
+
     ui->toolButton_rescan ->setVisible(false);
     ui->comboBox_com      ->setVisible(false);
     ui->toolButton_connect->setVisible(false);
@@ -264,7 +266,7 @@ void GrblCommander::comDisconnect()
   ui->groupBox_config         ->setDisabled(true);
   ui->scrollAreaWidgetContents->setDisabled(true);
 
-  ui->label_grbl_status->setText("?");
+  showGrblStatus("?");
 
   m_commandQueue.clear();
   m_grblBufferLength = 0;
