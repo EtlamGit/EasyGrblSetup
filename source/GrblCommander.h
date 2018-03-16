@@ -10,6 +10,7 @@
 #include <QList>
 #include <QMap>
 #include <QSerialPort>
+#include <mutex>
 
 
 namespace Ui {
@@ -20,7 +21,8 @@ class GrblStatusStorage
 {
 public:
   GrblStatusStorage()
-    : MotionMode(-1)
+    : Status("?")
+    , MotionMode(-1)
     , Probing(-1)
     , WorkCoordinateSystem(-1)
     , PlaneSelect(-1)
@@ -36,21 +38,22 @@ public:
     , FeedRate(-1)
     , SpindleSpeed(-1) {}
 
-  int    MotionMode;
-  int    Probing;
-  int    WorkCoordinateSystem;
-  int    PlaneSelect;
-  int    DistanceMode;
-  int    FeedRateMode;
-  int    UnitsMode;
-  int    CutterRadiusCompensation;
-  int    ToolLengthOffset;
-  int    ProgramMode;
-  int    SpindleState;
-  int    CoolantState;
-  int    ToolNumber;
-  double FeedRate;
-  double SpindleSpeed;
+  QString Status;
+  int     MotionMode;
+  int     Probing;
+  int     WorkCoordinateSystem;
+  int     PlaneSelect;
+  int     DistanceMode;
+  int     FeedRateMode;
+  int     UnitsMode;
+  int     CutterRadiusCompensation;
+  int     ToolLengthOffset;
+  int     ProgramMode;
+  int     SpindleState;
+  int     CoolantState;
+  int     ToolNumber;
+  double  FeedRate;
+  double  SpindleSpeed;
 };
 
 
@@ -70,8 +73,10 @@ public slots:
   void sendHold();
   void sendResume();
 
-  // normal queued commands
+  void appendCommandDirectWrite(QString command);
+  // normal queued commands (thread safe)
   void appendCommand(QString command);
+  bool isCommandBufferEmpty();
 
   // COM methods
   bool comRescan();
@@ -80,6 +85,7 @@ public slots:
 
   // show text in status label and adapt background accordingly
   void showGrblStatus(const QString & status);
+  const QString & getGrblStatus();
 
   // interface to query compile time options
   bool isOption(QString option);
@@ -169,7 +175,7 @@ private:
   QStringList       m_commandQueue;       // buffer for write commands
 
   int               m_grblBufferLength;   // estimated number of bytes in Grbl buffer
-  QList<QString>    m_grblCommandList;    // list with length of latest commands
+  QList<QString>    m_grblCommandList;    // list with latest commands
 
   bool              m_grblFound;          // flag if a grbl message was received
   int               m_axesInStatus;       // number of axes reportet in status messages
@@ -180,7 +186,7 @@ private:
   GrblStatusStorage m_grblStatus;         // grbl Status
   QString           m_grblPins;           // grbl PIN status
 
-
+  std::mutex        m_mutex;              // mutex to protect m_commandQueue
 };
 
 #endif // GRBLCOMMANDER_H

@@ -6,6 +6,7 @@
 #include <QSerialPortInfo>
 #include <QMessageBox>
 
+
 GrblCommander::GrblCommander(Ui::EasyGrblSetup *ui)
   : ui(ui)
   , m_statusCounter(0)
@@ -99,11 +100,13 @@ void GrblCommander::sendResume()    { sendRealtime('~'); }
 void GrblCommander::jogStop()
 {
   // remove Jog commands from our queue (just in case)
+  m_mutex.lock();
   for (int i = 0; i < m_commandQueue.length();) {
     if (m_commandQueue[i].startsWith("$J="))
       m_commandQueue.removeAt(i);
     else i++;
   }
+  m_mutex.unlock();
   // remove Jog commands from Grbl queue
   sendRealtime('\x85');
 }
@@ -119,6 +122,13 @@ bool GrblCommander::sendRealtime(char command)
 }
 
 
+void GrblCommander::appendCommandDirectWrite(QString command)
+{
+  appendCommand(command);
+  // and try to write immediatly
+  writeCommands();
+}
+
 void GrblCommander::appendCommand(QString command)
 {
   // ignore empty lines
@@ -130,16 +140,25 @@ void GrblCommander::appendCommand(QString command)
     command.append('\n');
 
   // append command to command queue
+  m_mutex.lock();
   m_commandQueue.append( command );
+  m_mutex.unlock();
+}
 
-  // and try to write immediatly
-  writeCommands();
+
+bool GrblCommander::isCommandBufferEmpty()
+{
+  m_mutex.lock();
+  bool empty = (m_commandQueue.length() == 0);
+  m_mutex.unlock();
+  return empty;
 }
 
 
 void GrblCommander::writeCommands()
 {
   // write queued commands
+  m_mutex.lock();
   while ((m_serialPort.isOpen()) && (!m_commandQueue.isEmpty()) &&
          (m_grblBufferLength + m_commandQueue.at(0).length() <= 128)) {
     // use the first command from buffer
@@ -179,6 +198,7 @@ void GrblCommander::writeCommands()
     m_serialPort.write(filtered,filtered.length());
     m_serialPort.flush();
   }
+  m_mutex.unlock();
 
   // update command buffer label
   if ((m_grblBufferLength > 0) || (m_grblCommandList.length() > 0 )) {
@@ -663,6 +683,7 @@ void GrblCommander::parseGrblStatusList(const QString & line)
 
 void GrblCommander::showGrblStatus(const QString & status)
 {
+  m_grblStatus.Status = status;
   QStringList list = status.split(':');
 
   // copy status to label
@@ -686,9 +707,18 @@ void GrblCommander::showGrblStatus(const QString & status)
     ui->label_grbl_status->setStyleSheet("QLabel { background-color:yellow; }");
   } else if (list.at(0) == "Sleep") {
     ui->label_grbl_status->setStyleSheet("QLabel { background-color:darkgray; }");
+  } else {
+    ui->label_grbl_status->setStyleSheet("");
   }
 
 }
+
+
+const QString & GrblCommander::getGrblStatus()
+{
+  return m_grblStatus.Status;
+}
+
 
 void GrblCommander::parseGrblStatus(const QString & status)
 {
