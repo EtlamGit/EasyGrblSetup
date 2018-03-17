@@ -16,8 +16,6 @@ GrblCommander::GrblCommander(Ui::EasyGrblSetup *ui)
   , m_reg2axes{6, 6, 6, 6, 6, 6}
   , m_WCO{0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
 {
-  m_grblCommandList.clear();
-
   comDisconnect();
   comRescan();
 
@@ -81,10 +79,7 @@ void GrblCommander::requestFirstStatus()
   appendCommand("$# (no-logging)");  // request gcode parameters
 
   // enable GUI elements
-  ui->groupBox_status         ->setEnabled(true);
-  ui->groupBox_jog            ->setEnabled(true);
-  ui->groupBox_config         ->setEnabled(true);
-  ui->scrollAreaWidgetContents->setEnabled(true);
+  emit machineConnected();
 }
 
 
@@ -128,6 +123,7 @@ void GrblCommander::appendCommandDirectWrite(QString command)
   // and try to write immediatly
   writeCommands();
 }
+
 
 void GrblCommander::appendCommand(QString command)
 {
@@ -281,12 +277,8 @@ void GrblCommander::comDisconnect()
   ui->comboBox_com      ->setVisible(true);
   ui->toolButton_connect->setVisible(true);
 
-  ui->groupBox_status         ->setDisabled(true);
-  ui->groupBox_jog            ->setDisabled(true);
-  ui->groupBox_config         ->setDisabled(true);
-  ui->scrollAreaWidgetContents->setDisabled(true);
-
   showGrblStatus("?");
+  emit machineDisconnected();
 
   m_commandQueue.clear();
   m_grblBufferLength = 0;
@@ -377,8 +369,8 @@ void GrblCommander::parseLine(const QString &line)
   if (line == "ok")             return parseOK();
   if (line.left(6) == "error:") return parseError(line);
   if (line.left(6) == "ALARM:") return parseAlarm(line);
-  if (line.left(1) == "<")      return parseStatus (line);
-  if (line.left(1) == "$")      return parseSetting (line);
+  if (line.left(1) == "<")      return parseStatus(line);
+  if (line.left(1) == "$")      return parseSetting(line);
   if (line.left(1) == "[")      return parseMessage(line);
 
   // search for welcome message
@@ -459,16 +451,16 @@ void GrblCommander::parseMessage(const QString &line)
       QString version   = line.mid(1,line.length()-2).split(',').at(0).split(':').at(1);
       QString builddate = line.mid(1,line.length()-2).split(',').at(1).split(':').at(1);
       if (builddate.length()>10) {
-        emit foundMachine(builddate.right(builddate.length()-10));
+        emit foundMachineName(builddate.right(builddate.length()-10));
       } else {
-        emit foundMachine(version + "." + builddate.mid(6,4) + builddate.mid(3,2) + builddate.left(2));
+        emit foundMachineName(version + "." + builddate.mid(6,4) + builddate.mid(3,2) + builddate.left(2));
       }
     } else {
       // [VER:1.1f3.YYYYMMDD:optionalString]
       if (message.at(2).length() > 0) {
-        emit foundMachine(message.at(2));
+        emit foundMachineName(message.at(2));
       } else {
-        emit foundMachine(message.at(1));
+        emit foundMachineName(message.at(1));
       }
     }
     emit receivedMessage(line);

@@ -22,11 +22,15 @@ EasyGrblSetup::EasyGrblSetup(QWidget *parent)
 
 
   // axes identification
+  connect( m_grblCom,              &GrblCommander::machineConnected,
+           this,                   &EasyGrblSetup::enableElementsAfterConnect);
+  connect( m_grblCom,              &GrblCommander::machineDisconnected,
+           this,                   &EasyGrblSetup::disableElementsAfterDisonnect);
   connect( m_grblCom,              &GrblCommander::foundAxis,
            m_configWatcher,        &ConfigWatcher::setAxis);
   connect( m_grblCom,              &GrblCommander::foundAxis,
            m_axesHide,             &AxesVisibility::axisEnable);
-  connect( m_grblCom,              &GrblCommander::foundMachine,
+  connect( m_grblCom,              &GrblCommander::foundMachineName,
            ui->label_grbl_version, &QLabel::setText);
 
   // configuration updates
@@ -151,10 +155,32 @@ EasyGrblSetup::EasyGrblSetup(QWidget *parent)
   createContextMenus();
 }
 
+
 EasyGrblSetup::~EasyGrblSetup()
 {
   delete ui;
 }
+
+
+void EasyGrblSetup::enableElementsAfterConnect()
+{
+  // enable GUI elements
+  ui->groupBox_status         ->setEnabled(true);
+  ui->groupBox_jog            ->setEnabled(true);
+  ui->groupBox_config         ->setEnabled(true);
+  ui->scrollAreaWidgetContents->setEnabled(true);
+}
+
+
+void EasyGrblSetup::disableElementsAfterDisonnect()
+{
+  // disable GUI elements
+  ui->groupBox_status         ->setDisabled(true);
+  ui->groupBox_jog            ->setDisabled(true);
+  ui->groupBox_config         ->setDisabled(true);
+  ui->scrollAreaWidgetContents->setDisabled(true);
+}
+
 
 // ---------- ---------- ---------- ---------- ---------- ---------- ---------- ----------
 // Logging

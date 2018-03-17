@@ -29,6 +29,9 @@ private:
   Ui::EasyGrblSetup *ui;
 
 private slots:
+  void enableElementsAfterConnect();
+  void disableElementsAfterDisonnect();
+
   void normalLog (QString text);
   void verboseLog(QString text);
 
