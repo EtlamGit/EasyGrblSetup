@@ -87,6 +87,8 @@ private slots:
   void buttonSpeedTestB();
   void buttonSpeedTestC();
 
+  void directionTest(QChar axis);
+
 
 private:
   ConfigWatcher  *m_configWatcher;

@@ -307,63 +307,22 @@ void EasyGrblSetup::buttonDisableHardlimit() { m_grblCom->appendCommand("$21=0")
 void EasyGrblSetup::buttonEnableHoming()     { m_grblCom->appendCommand("$22=1"); }
 void EasyGrblSetup::buttonDisableHoming()    { m_grblCom->appendCommand("$22=0"); }
 
-void EasyGrblSetup::buttonDirectionTestX()
-{
-  if (ui->label_grbl_status->text() == "Idle") {
-    for (int i = 0; i<5; i++) {
-      m_grblCom->appendCommand("G91 G1 X+20 F300");
-      m_grblCom->appendCommand("G91 G0 X-20");
-    }
-  }
-}
+void EasyGrblSetup::buttonDirectionTestX() { directionTest('X'); }
+void EasyGrblSetup::buttonDirectionTestY() { directionTest('Y'); }
+void EasyGrblSetup::buttonDirectionTestZ() { directionTest('Z'); }
+void EasyGrblSetup::buttonDirectionTestA() { directionTest('A'); }
+void EasyGrblSetup::buttonDirectionTestB() { directionTest('B'); }
+void EasyGrblSetup::buttonDirectionTestC() { directionTest('C'); }
 
-void EasyGrblSetup::buttonDirectionTestY()
+void EasyGrblSetup::directionTest(QChar axis)
 {
   if (ui->label_grbl_status->text() == "Idle") {
+    m_grblCom->appendCommand("G91");
     for (int i = 0; i<5; i++) {
-      m_grblCom->appendCommand("G91 G1 Y+20 F300");
-      m_grblCom->appendCommand("G91 G0 Y-20");
+      m_grblCom->appendCommand(QString("G1 %1+20 F300").arg(axis));
+      m_grblCom->appendCommand(QString("G0 %1-20").arg(axis));
     }
-  }
-}
-
-void EasyGrblSetup::buttonDirectionTestZ()
-{
-  if (ui->label_grbl_status->text() == "Idle") {
-    for (int i = 0; i<5; i++) {
-      m_grblCom->appendCommand("G91 G1 Z+20 F300");
-      m_grblCom->appendCommand("G91 G0 Z-20");
-    }
-  }
-}
-
-void EasyGrblSetup::buttonDirectionTestA()
-{
-  if (ui->label_grbl_status->text() == "Idle") {
-    for (int i = 0; i<5; i++) {
-      m_grblCom->appendCommand("G1 A+20 F300");
-      m_grblCom->appendCommand("G0 A0");
-    }
-  }
-}
-
-void EasyGrblSetup::buttonDirectionTestB()
-{
-  if (ui->label_grbl_status->text() == "Idle") {
-    for (int i = 0; i<5; i++) {
-      m_grblCom->appendCommand("G1 B+20 F300");
-      m_grblCom->appendCommand("G0 B0");
-    }
-  }
-}
-
-void EasyGrblSetup::buttonDirectionTestC()
-{
-  if (ui->label_grbl_status->text() == "Idle") {
-    for (int i = 0; i<5; i++) {
-      m_grblCom->appendCommand("G1 C+20 F300");
-      m_grblCom->appendCommand("G0 C0");
-    }
+    m_grblCom->appendCommand("G90");
   }
 }
 
