@@ -72,8 +72,8 @@ void GrblCommander::requestFirstStatus()
   // start regular status timer
   m_timer.start();
 
-  sendRealtime('?');    // request first status
-  appendCommand("$I (no-logging)");  // request build info
+  sendRealtime('?');                 // request first status
+  appendCommand("$I");               // request build info
   appendCommand("$$ (no-logging)");  // request settings
   appendCommand("$G (no-logging)");  // request gcode parser state
   appendCommand("$# (no-logging)");  // request gcode parameters
@@ -163,8 +163,7 @@ void GrblCommander::writeCommands()
     if (!command.contains("(no-logging)") && !command.startsWith("$J="))
       emit writingCommand("> " + command.left(command.length()-1));
 
-    // remove comment and spaces at end
-    command.remove(QRegExp("\\((.*)\\)"));
+    // remove spaces at end
     while (command.endsWith(' '))
       command.chop(1);
 
@@ -252,7 +251,12 @@ bool GrblCommander::comConnect()
 
     ui->plainTextEdit_log->clear();
 
+    // reset machine knowledge
     m_grblFound = false;
+    m_axesInStatus = -1;
+    for (int i = 0; i < 6; i++) {
+      m_reg2axes[i] = 6;
+    }
 
     // setup single shot timer to detect timeout at connect
     QTimer::singleShot(5000, this, &GrblCommander::handleConnectTimeout);
@@ -413,6 +417,7 @@ void GrblCommander::parseError(const QString &line)
 void GrblCommander::parseAlarm(const QString &line)
 {
   QStringList list = line.split(':');
+  showGrblStatus("Alarm");
   emit receivedAlarm(list.at(1).toInt());
   emit receivedMessage(line);
 }
@@ -420,6 +425,7 @@ void GrblCommander::parseAlarm(const QString &line)
 void GrblCommander::parseStatus(const QString &line)
 {
   if (m_axesInStatus<0) {
+    // detect number of axes reported in status
     QStringList status = line.mid(1,line.length()-2).split('|');
     QStringList mpos = status.at(1).split(':').at(1).split(',');
     m_axesInStatus = mpos.length();
@@ -437,7 +443,10 @@ void GrblCommander::parseSetting(const QString &line)
   m_grblSettings[iNum] = setting.at(1);
 
   emit receivedSetting(line);
-  // suppress receivedMessage(line);
+  if ( m_grblCommandList.isEmpty() ||
+      !m_grblCommandList.at(0).contains("no-logging")) {
+    emit receivedMessage(line);
+  }
 }
 
 void GrblCommander::parseMessage(const QString &line)
@@ -463,7 +472,6 @@ void GrblCommander::parseMessage(const QString &line)
         emit foundMachineName(message.at(1));
       }
     }
-    emit receivedMessage(line);
 
   } else if (message.at(0) == "OPT") {
     // [OPT:VMH,AVR_644,SPI_SR,SPI_DISP,PANEL,C_AXIS]
@@ -497,7 +505,6 @@ void GrblCommander::parseMessage(const QString &line)
       m_reg2axes[maxis++] = 5;
       emit foundAxis(5,true);
     }
-    // suppress receivedMessage(line);
 
   } else if (message.at(0) == "GC") { // $G G-code Parser State Message
     parseParserStateMessage(message.at(1));
@@ -515,8 +522,12 @@ void GrblCommander::parseMessage(const QString &line)
   } else if (message.at(0) == "TLO") {
   } else if (message.at(0) == "PRB") {
 
-  } else
+  }
+
+  if ( m_grblCommandList.isEmpty() ||
+      !m_grblCommandList.at(0).contains("no-logging")) {
     emit receivedMessage(line);
+  }
 }
 
 
@@ -658,6 +669,8 @@ void GrblCommander::parseParserStateMessage(const QString &message)
 // ---------- ---------- ---------- ---------- ---------- ---------- ----------
 // <Status> Parser
 // ---------- ---------- ---------- ---------- ---------- ---------- ----------
+
+// example <Idle|MPos:0.000,0.000,0.000|FS:0.0,0>
 void GrblCommander::parseGrblStatusList(const QString & line)
 {
   QStringList list = line.mid(1,line.length()-2).split('|');
@@ -669,10 +682,12 @@ void GrblCommander::parseGrblStatusList(const QString & line)
   }
 
   if (list.filter("Pn:").length() == 0) {
-     parseGrblStatusPins("");
+    // when no pin state is reported, no pins are active
+    parseGrblStatusPins("");
   }
 }
 
+// valid states types: Idle, Run, Hold, Jog, Alarm, Door, Check, Home, Sleep
 void GrblCommander::showGrblStatus(const QString & status)
 {
   m_grblStatus.Status = status;
@@ -680,6 +695,7 @@ void GrblCommander::showGrblStatus(const QString & status)
 
   // copy status to label
   ui->label_grbl_status->setText(status);
+
   // do some color tweaking based on status
   if        (list.at(0) == "Idle") {
     ui->label_grbl_status->setStyleSheet("");
@@ -712,6 +728,7 @@ const QString & GrblCommander::getGrblStatus()
 }
 
 
+// valid parameters: MPos, WPos, WCO, Bf, Ln, F, FS, Pn, Ov, A
 void GrblCommander::parseGrblStatus(const QString & status)
 {
   QStringList plist = status.split(':');
@@ -729,6 +746,7 @@ void GrblCommander::parseGrblStatus(const QString & status)
     if (plist.at(0) == "A")     return;  // ignore
   }
 
+  // log everything not parsable
   ui->plainTextEdit_log->appendPlainText(status);
 }
 
