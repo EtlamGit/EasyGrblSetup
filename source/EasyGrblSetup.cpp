@@ -72,7 +72,7 @@ EasyGrblSetup::EasyGrblSetup(QWidget *parent)
   connect( m_grblCom,       &GrblCommander::receivedJogOK,
            m_jogController, &JogController::jogLoop);
   connect( m_jogController, &JogController::jogCommand,
-           m_grblCom,       &GrblCommander::appendCommand);
+           m_grblCom,       &GrblCommander::appendCommandDirectWrite);
   connect( m_jogController, &JogController::jogStop,
            m_grblCom,       &GrblCommander::jogStop);
 
