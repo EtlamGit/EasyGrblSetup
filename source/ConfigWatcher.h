@@ -77,6 +77,13 @@ private slots:
   void updateConfig130B();
   void updateConfig130C();
 
+  void maxStepCheckX();
+  void maxStepCheckY();
+  void maxStepCheckZ();
+  void maxStepCheckA();
+  void maxStepCheckB();
+  void maxStepCheckC();
+
   void writeConfig(int pnum, int value);
   void writeConfig(int pnum, double value);
 

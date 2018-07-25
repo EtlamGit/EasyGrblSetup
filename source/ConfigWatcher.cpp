@@ -144,7 +144,7 @@ ConfigWatcher::ConfigWatcher(Ui::EasyGrblSetup *pui)
 
 ConfigWatcher::~ConfigWatcher()
 {
-  delete ui;
+  ui = NULL;
 }
 
 
@@ -265,12 +265,12 @@ void ConfigWatcher::parseGrblSetting(QString line)
     case 105:
       aindex = m_reg2axes[ pindex - 100 ];
       switch (aindex){
-      case 0:  ui->doubleSpinBox_100X->setValue(fvalue);  break;
-      case 1:  ui->doubleSpinBox_100Y->setValue(fvalue);  break;
-      case 2:  ui->doubleSpinBox_100Z->setValue(fvalue);  break;
-      case 3:  ui->doubleSpinBox_100A->setValue(fvalue);  break;
-      case 4:  ui->doubleSpinBox_100B->setValue(fvalue);  break;
-      case 5:  ui->doubleSpinBox_100C->setValue(fvalue);  break;
+      case 0:  ui->doubleSpinBox_100X->setValue(fvalue); maxStepCheckX();  break;
+      case 1:  ui->doubleSpinBox_100Y->setValue(fvalue); maxStepCheckY();  break;
+      case 2:  ui->doubleSpinBox_100Z->setValue(fvalue); maxStepCheckZ();  break;
+      case 3:  ui->doubleSpinBox_100A->setValue(fvalue); maxStepCheckA();  break;
+      case 4:  ui->doubleSpinBox_100B->setValue(fvalue); maxStepCheckB();  break;
+      case 5:  ui->doubleSpinBox_100C->setValue(fvalue); maxStepCheckC();  break;
       }
       break;
 
@@ -282,12 +282,12 @@ void ConfigWatcher::parseGrblSetting(QString line)
     case 115:
       aindex = m_reg2axes[ pindex - 110 ];
       switch (aindex){
-      case 0:  ui->doubleSpinBox_110X->setValue(fvalue);  break;
-      case 1:  ui->doubleSpinBox_110Y->setValue(fvalue);  break;
-      case 2:  ui->doubleSpinBox_110Z->setValue(fvalue);  break;
-      case 3:  ui->doubleSpinBox_110A->setValue(fvalue);  break;
-      case 4:  ui->doubleSpinBox_110B->setValue(fvalue);  break;
-      case 5:  ui->doubleSpinBox_110C->setValue(fvalue);  break;
+      case 0:  ui->doubleSpinBox_110X->setValue(fvalue); maxStepCheckX();  break;
+      case 1:  ui->doubleSpinBox_110Y->setValue(fvalue); maxStepCheckY();  break;
+      case 2:  ui->doubleSpinBox_110Z->setValue(fvalue); maxStepCheckZ();  break;
+      case 3:  ui->doubleSpinBox_110A->setValue(fvalue); maxStepCheckA();  break;
+      case 4:  ui->doubleSpinBox_110B->setValue(fvalue); maxStepCheckB();  break;
+      case 5:  ui->doubleSpinBox_110C->setValue(fvalue); maxStepCheckC();  break;
       }
       break;
 
@@ -315,7 +315,7 @@ void ConfigWatcher::parseGrblSetting(QString line)
     case 134:
     case 135:
       aindex = m_reg2axes[ pindex - 130 ];
-      switch (aindex){
+      switch (aindex) {
       case 0:  ui->doubleSpinBox_130X->setValue(fvalue);  break;
       case 1:  ui->doubleSpinBox_130Y->setValue(fvalue);  break;
       case 2:  ui->doubleSpinBox_130Z->setValue(fvalue);  break;
@@ -376,11 +376,11 @@ void ConfigWatcher::updateConfig22() { writeConfig( 22, ui->checkBox_22->isCheck
 void ConfigWatcher::updateConfig23()
 {
   writeConfig( 2, (ui->checkBox_23X->isChecked() * m_axes2mask[0]) +
-                   (ui->checkBox_23Y->isChecked() * m_axes2mask[1]) +
-                   (ui->checkBox_23Z->isChecked() * m_axes2mask[2]) +
-                   (ui->checkBox_23A->isChecked() * m_axes2mask[3]) +
-                   (ui->checkBox_23B->isChecked() * m_axes2mask[4]) +
-                   (ui->checkBox_23C->isChecked() * m_axes2mask[5]) );
+                  (ui->checkBox_23Y->isChecked() * m_axes2mask[1]) +
+                  (ui->checkBox_23Z->isChecked() * m_axes2mask[2]) +
+                  (ui->checkBox_23A->isChecked() * m_axes2mask[3]) +
+                  (ui->checkBox_23B->isChecked() * m_axes2mask[4]) +
+                  (ui->checkBox_23C->isChecked() * m_axes2mask[5]) );
 }
 
 void ConfigWatcher::updateConfig24() { writeConfig( 24, ui->spinBox_24->value() ); }
@@ -393,19 +393,19 @@ void ConfigWatcher::updateConfig31() { writeConfig( 31, ui->spinBox_31->value() 
 void ConfigWatcher::updateConfig32() { writeConfig( 32, ui->checkBox_32->isChecked() ); }
 
 
-void ConfigWatcher::updateConfig100X() { writeConfig( 100+m_axes2reg[0], ui->doubleSpinBox_100X->value() ); }
-void ConfigWatcher::updateConfig100Y() { writeConfig( 100+m_axes2reg[1], ui->doubleSpinBox_100Y->value() ); }
-void ConfigWatcher::updateConfig100Z() { writeConfig( 100+m_axes2reg[2], ui->doubleSpinBox_100Z->value() ); }
-void ConfigWatcher::updateConfig100A() { writeConfig( 100+m_axes2reg[3], ui->doubleSpinBox_100A->value() ); }
-void ConfigWatcher::updateConfig100B() { writeConfig( 100+m_axes2reg[4], ui->doubleSpinBox_100B->value() ); }
-void ConfigWatcher::updateConfig100C() { writeConfig( 100+m_axes2reg[5], ui->doubleSpinBox_100C->value() ); }
+void ConfigWatcher::updateConfig100X() { writeConfig( 100+m_axes2reg[0], ui->doubleSpinBox_100X->value() ); maxStepCheckX(); }
+void ConfigWatcher::updateConfig100Y() { writeConfig( 100+m_axes2reg[1], ui->doubleSpinBox_100Y->value() ); maxStepCheckY(); }
+void ConfigWatcher::updateConfig100Z() { writeConfig( 100+m_axes2reg[2], ui->doubleSpinBox_100Z->value() ); maxStepCheckZ(); }
+void ConfigWatcher::updateConfig100A() { writeConfig( 100+m_axes2reg[3], ui->doubleSpinBox_100A->value() ); maxStepCheckA(); }
+void ConfigWatcher::updateConfig100B() { writeConfig( 100+m_axes2reg[4], ui->doubleSpinBox_100B->value() ); maxStepCheckB(); }
+void ConfigWatcher::updateConfig100C() { writeConfig( 100+m_axes2reg[5], ui->doubleSpinBox_100C->value() ); maxStepCheckC(); }
 
-void ConfigWatcher::updateConfig110X() { writeConfig( 110+m_axes2reg[0], ui->doubleSpinBox_110X->value() ); }
-void ConfigWatcher::updateConfig110Y() { writeConfig( 110+m_axes2reg[1], ui->doubleSpinBox_110Y->value() ); }
-void ConfigWatcher::updateConfig110Z() { writeConfig( 110+m_axes2reg[2], ui->doubleSpinBox_110Z->value() ); }
-void ConfigWatcher::updateConfig110A() { writeConfig( 110+m_axes2reg[3], ui->doubleSpinBox_110A->value() ); }
-void ConfigWatcher::updateConfig110B() { writeConfig( 110+m_axes2reg[4], ui->doubleSpinBox_110B->value() ); }
-void ConfigWatcher::updateConfig110C() { writeConfig( 110+m_axes2reg[5], ui->doubleSpinBox_110C->value() ); }
+void ConfigWatcher::updateConfig110X() { writeConfig( 110+m_axes2reg[0], ui->doubleSpinBox_110X->value() ); maxStepCheckX(); }
+void ConfigWatcher::updateConfig110Y() { writeConfig( 110+m_axes2reg[1], ui->doubleSpinBox_110Y->value() ); maxStepCheckY(); }
+void ConfigWatcher::updateConfig110Z() { writeConfig( 110+m_axes2reg[2], ui->doubleSpinBox_110Z->value() ); maxStepCheckZ(); }
+void ConfigWatcher::updateConfig110A() { writeConfig( 110+m_axes2reg[3], ui->doubleSpinBox_110A->value() ); maxStepCheckA(); }
+void ConfigWatcher::updateConfig110B() { writeConfig( 110+m_axes2reg[4], ui->doubleSpinBox_110B->value() ); maxStepCheckB(); }
+void ConfigWatcher::updateConfig110C() { writeConfig( 110+m_axes2reg[5], ui->doubleSpinBox_110C->value() ); maxStepCheckC(); }
 
 void ConfigWatcher::updateConfig120X() { writeConfig( 120+m_axes2reg[0], ui->doubleSpinBox_120X->value() ); }
 void ConfigWatcher::updateConfig120Y() { writeConfig( 120+m_axes2reg[1], ui->doubleSpinBox_120Y->value() ); }
@@ -420,3 +420,71 @@ void ConfigWatcher::updateConfig130Z() { writeConfig( 130+m_axes2reg[2], ui->dou
 void ConfigWatcher::updateConfig130A() { writeConfig( 130+m_axes2reg[3], ui->doubleSpinBox_130A->value() ); }
 void ConfigWatcher::updateConfig130B() { writeConfig( 130+m_axes2reg[4], ui->doubleSpinBox_130B->value() ); }
 void ConfigWatcher::updateConfig130C() { writeConfig( 130+m_axes2reg[5], ui->doubleSpinBox_130C->value() ); }
+
+void ConfigWatcher::maxStepCheckX()
+{
+  if (30000.0 < (ui->doubleSpinBox_100X->value() * ui->doubleSpinBox_110X->value() / 60.0)) {
+    ui->doubleSpinBox_100X->setStyleSheet("QDoubleSpinBox { background-color:orangered; }");
+    ui->doubleSpinBox_110X->setStyleSheet("QDoubleSpinBox { background-color:orangered; }");
+  } else {
+    ui->doubleSpinBox_100X->setStyleSheet("");
+    ui->doubleSpinBox_110X->setStyleSheet("");
+  }
+}
+
+void ConfigWatcher::maxStepCheckY()
+{
+  if (30000.0 < (ui->doubleSpinBox_100Y->value() * ui->doubleSpinBox_110Y->value() / 60.0)) {
+    ui->doubleSpinBox_100Y->setStyleSheet("QDoubleSpinBox { background-color:orangered; }");
+    ui->doubleSpinBox_110Y->setStyleSheet("QDoubleSpinBox { background-color:orangered; }");
+  } else {
+    ui->doubleSpinBox_100Y->setStyleSheet("");
+    ui->doubleSpinBox_110Y->setStyleSheet("");
+  }
+}
+
+void ConfigWatcher::maxStepCheckZ()
+{
+  if (30000.0 < (ui->doubleSpinBox_100Z->value() * ui->doubleSpinBox_110Z->value() / 60.0)) {
+    ui->doubleSpinBox_100Z->setStyleSheet("QDoubleSpinBox { background-color:orangered; }");
+    ui->doubleSpinBox_110Z->setStyleSheet("QDoubleSpinBox { background-color:orangered; }");
+  } else {
+    ui->doubleSpinBox_100Z->setStyleSheet("");
+    ui->doubleSpinBox_110Z->setStyleSheet("");
+  }
+}
+
+void ConfigWatcher::maxStepCheckA()
+{
+  if (30000.0 < (ui->doubleSpinBox_100A->value() * ui->doubleSpinBox_110A->value() / 60.0)) {
+    ui->doubleSpinBox_100A->setStyleSheet("QDoubleSpinBox { background-color:orangered; }");
+    ui->doubleSpinBox_110A->setStyleSheet("QDoubleSpinBox { background-color:orangered; }");
+  } else {
+    ui->doubleSpinBox_100A->setStyleSheet("");
+    ui->doubleSpinBox_110A->setStyleSheet("");
+  }
+}
+
+void ConfigWatcher::maxStepCheckB()
+{
+  if (30000.0 < (ui->doubleSpinBox_100B->value() * ui->doubleSpinBox_110B->value() / 60.0)) {
+    ui->doubleSpinBox_100B->setStyleSheet("QDoubleSpinBox { background-color:orangered; }");
+    ui->doubleSpinBox_110B->setStyleSheet("QDoubleSpinBox { background-color:orangered; }");
+  } else {
+    ui->doubleSpinBox_100B->setStyleSheet("");
+    ui->doubleSpinBox_110B->setStyleSheet("");
+  }
+}
+
+void ConfigWatcher::maxStepCheckC()
+{
+  if (30000.0 < (ui->doubleSpinBox_100C->value() * ui->doubleSpinBox_110C->value() / 60.0)) {
+    ui->doubleSpinBox_100C->setStyleSheet("QDoubleSpinBox { background-color:orangered; }");
+    ui->doubleSpinBox_110C->setStyleSheet("QDoubleSpinBox { background-color:orangered; }");
+  } else {
+    ui->doubleSpinBox_100C->setStyleSheet("");
+    ui->doubleSpinBox_110C->setStyleSheet("");
+  }
+}
+
+
