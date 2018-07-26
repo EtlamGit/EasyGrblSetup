@@ -247,7 +247,7 @@
     <message>
         <location filename="../source/EasyGrblSetup.ui" line="3699"/>
         <source>front Y</source>
-        <translation type="unfinished"></translation>
+        <translation>vorne Y</translation>
     </message>
     <message>
         <location filename="../source/EasyGrblSetup.ui" line="3709"/>
@@ -257,27 +257,27 @@
     <message>
         <location filename="../source/EasyGrblSetup.ui" line="3719"/>
         <source>bottom Z</source>
-        <translation type="unfinished"></translation>
+        <translation>unten Z</translation>
     </message>
     <message>
         <location filename="../source/EasyGrblSetup.ui" line="3729"/>
         <source>left X</source>
-        <translation type="unfinished"></translation>
+        <translation>links X</translation>
     </message>
     <message>
         <location filename="../source/EasyGrblSetup.ui" line="3736"/>
         <source>X right</source>
-        <translation type="unfinished"></translation>
+        <translation>X rechts</translation>
     </message>
     <message>
         <location filename="../source/EasyGrblSetup.ui" line="3743"/>
         <source>Y back</source>
-        <translation type="unfinished"></translation>
+        <translation>Y hinten</translation>
     </message>
     <message>
         <location filename="../source/EasyGrblSetup.ui" line="3750"/>
         <source>Z top</source>
-        <translation type="unfinished"></translation>
+        <translation>Z oben</translation>
     </message>
     <message>
         <location filename="../source/EasyGrblSetup.ui" line="3757"/>
