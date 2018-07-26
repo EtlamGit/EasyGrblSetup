@@ -54,8 +54,8 @@ void GrblCommander::handleConnectTimeout()
   if (!m_grblFound) {
     QMessageBox msgBox;
     msgBox.setIcon(QMessageBox::Warning);
-    msgBox.setText("No grbl controller found!");
-    msgBox.setInformativeText("For safety reasons no communication is send via COM until this message is received.\nYou can disable this on your own risk.");
+    msgBox.setText(tr("No Grbl controller found!"));
+    msgBox.setInformativeText(tr("For safety reasons no communication is send via COM until a Grbl controller is detected.\nYou can disable this on your own risk."));
     QAbstractButton* pUnsafe = msgBox.addButton(tr("Unsafe"), QMessageBox::YesRole);
     msgBox.addButton(QMessageBox::Ok);
     msgBox.exec();

@@ -19,14 +19,17 @@ SOURCES += source/main.cpp \
            source/ConfigWatcher.cpp \
            source/GrblCommander.cpp \
            source/JogController.cpp \
-    source/AxesVisibility.cpp
+           source/AxesVisibility.cpp
 
-HEADERS  += source/EasyGrblSetup.h \
-            source/qt_before_5_7_0.h \
-            source/QLabelClickable.h \
-            source/ConfigWatcher.h \
-            source/GrblCommander.h \
-            source/JogController.h \
-    source/AxesVisibility.h
+HEADERS += source/EasyGrblSetup.h \
+           source/qt_before_5_7_0.h \
+           source/QLabelClickable.h \
+           source/ConfigWatcher.h \
+           source/GrblCommander.h \
+           source/JogController.h \
+           source/AxesVisibility.h
 
-FORMS    += source/EasyGrblSetup.ui
+FORMS += source/EasyGrblSetup.ui
+
+TRANSLATIONS += locale/EasyGrblSetup_fr.ts \
+                locale/EasyGrblSetup_de.ts

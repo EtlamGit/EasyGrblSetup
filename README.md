@@ -20,6 +20,13 @@ This software is based on Qt/C++ and should therefore run on all operation syste
 * Step by step guide for necessary configuration
 
 
+## Translation
+For general discussion about translation use issue #2. If you would like to add a specific language you can add a new issue or directly create a pull request.
+Credits for available translations go to:
+* French: @LETARTARE
+* German: @EtlamGit
+
+
 ## License
 * You are free to use this software for private purpose.
 * I guarantee for nothing: functionality, physical damage, injury or harm you may take.
