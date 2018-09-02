@@ -6,6 +6,8 @@
 #include <QSerialPortInfo>
 #include <QMessageBox>
 
+#include <math.h>  // round, floor
+
 
 GrblCommander::GrblCommander(Ui::EasyGrblSetup *ui)
   : ui(ui)

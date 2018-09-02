@@ -10,6 +10,8 @@
   #include "qt_before_5_7_0.h"  // QOverload
 #endif
 
+#include <math.h>  // round
+
 
 ConfigWatcher::ConfigWatcher(Ui::EasyGrblSetup *pui)
   : ui(pui)
