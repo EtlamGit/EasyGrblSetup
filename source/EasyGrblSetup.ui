@@ -4341,7 +4341,7 @@
   <customwidget>
    <class>QLabelClickable</class>
    <extends>QLabel</extends>
-   <header>QLabelClickable.h</header>
+   <header>source/QLabelClickable.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
