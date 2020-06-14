@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: C++ Qt Ubuntu-18.04 CI
 
 on:
   push:
@@ -13,32 +13,26 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Install Qt
+    - name: install Qt
       uses: jurplel/install-qt-action@v2
       with:
         version: '5.9.5'
         host: 'linux'
         target: 'desktop'
-    - name: test home
-      run: ls -Rhals /home/runner/work
     - name: create BUILD folder
       run: |
         mkdir ../build
         ln -s ../EasyGrblSetup/source/QLabelClickable.h ../build/QLabelClickable.h
-    - name: where is DEFAULT
-      run: pwd; ls -hals
-    - name: where is BUILD
-      working-directory: ../build
-      run: pwd; ls -hals
     - name: qmake
       working-directory: ../build
-      run: |
-        ls -hals
-        cat ./QLabelClickable.h
-        qmake /home/runner/work/EasyGrblSetup/EasyGrblSetup/EasyGrblSetup.pro
-        ls -hals
+      run: qmake ../EasyGrblSetup/EasyGrblSetup.pro
     - name: make
       working-directory: ../build
       run: |
         make
         ls -hals
+    - name: archive build result
+      uses: actions/upload-artifact@v2
+      with:
+        name: Linux Binary
+        path: ../build/EasyGrblSetup
