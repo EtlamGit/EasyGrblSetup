@@ -13,10 +13,10 @@ GrblCommander::GrblCommander(Ui::EasyGrblSetup *ui)
   : ui(ui)
   , m_statusCounter(0)
   , m_grblBufferLength(0)
-  , m_grblPins("")
   , m_axesInStatus(-1)
   , m_reg2axes{6, 6, 6, 6, 6, 6}
   , m_WCO{0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
+  , m_grblPins("")
 {
   comDisconnect();
   comRescan();
