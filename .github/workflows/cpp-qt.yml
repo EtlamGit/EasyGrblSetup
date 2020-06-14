@@ -22,17 +22,15 @@ jobs:
     - name: test home
       run: ls -Rhals /home/runner/work
     - name: create BUILD folder
-      run: mkdir ~/work/build;
+      run: mkdir ../build;
     - name: where is DEFAULT
       run: pwd; ls -hals
-    - name: where is HOME
-      run: cd ~; pwd; ls -hals
     - name: where is BUILD
-      working-directory: build
+      working-directory: ../build
       run: pwd; ls -hals
     - name: qmake
-      working-directory: build
+      working-directory: ../build
       run: qmake /home/runner/work/EasyGrblSetup/EasyGrblSetup/EasyGrblSetup.pro
     - name: make
-      working-directory: build
+      working-directory: ../build
       run: make
