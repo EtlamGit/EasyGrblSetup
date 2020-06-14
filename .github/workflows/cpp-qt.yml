@@ -22,7 +22,9 @@ jobs:
     - name: test home
       run: ls -Rhals /home/runner/work
     - name: create BUILD folder
-      run: mkdir ../build;
+      run: |
+        mkdir ../build
+        ln -s ../EasyGrblSetup/QLabelClickable.h ../build/QLabelClickable.h
     - name: where is DEFAULT
       run: pwd; ls -hals
     - name: where is BUILD
