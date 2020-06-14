@@ -22,7 +22,6 @@ jobs:
     - name: create BUILD folder
       run: |
         mkdir ../build
-        ln -s ../EasyGrblSetup/source/QLabelClickable.h ../build/QLabelClickable.h
     - name: qmake
       working-directory: ../build
       run: qmake ../EasyGrblSetup/EasyGrblSetup.pro
