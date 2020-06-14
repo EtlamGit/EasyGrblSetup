@@ -21,8 +21,12 @@ jobs:
         target: 'desktop'
     - name: test home
       run: ls -Rhals /home/runner/work
+    - name: create BUILD folder
+      run: mkdir ~/work/build;
     - name: where is DEFAULT
-      run: pwd; mkdir ..\build; ls -hals
+      run: pwd; ls -hals
+    - name: where is HOME
+      run: cd ~; pwd; ls -hals
     - name: where is BUILD
       working-directory: build
       run: pwd; ls -hals
