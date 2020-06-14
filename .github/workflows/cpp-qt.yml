@@ -20,12 +20,15 @@ jobs:
         host: 'linux'
         target: 'desktop'
     - name: test home
-      run: ls -Rhals /home/runner/
-    - name: where am I
-      run: pwd; ls
-    - name: qmake project
-      run: qmake -project
+      run: ls -Rhals /home/runner/work
+    - name: where is BUILD
+      working-directory: build
+      run: pwd; ls -hals
+    - name: where is DEFAULT
+      run: pwd; ls -hals
     - name: qmake
-      run: qmake
+      working-directory: build
+      run: qmake /home/runner/work/EasyGrblSetup/EasyGrblSetup/EasyGrblSetup.pro
     - name: make
+      working-directory: build
       run: make
