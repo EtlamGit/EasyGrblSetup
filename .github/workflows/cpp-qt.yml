@@ -30,7 +30,11 @@ jobs:
       run: pwd; ls -hals
     - name: qmake
       working-directory: ../build
-      run: qmake /home/runner/work/EasyGrblSetup/EasyGrblSetup/EasyGrblSetup.pro
+      run: |
+        qmake /home/runner/work/EasyGrblSetup/EasyGrblSetup/EasyGrblSetup.pro
+        ls -hals
     - name: make
       working-directory: ../build
-      run: make
+      run: |
+        make
+        ls -hals
