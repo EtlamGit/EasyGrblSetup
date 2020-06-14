@@ -24,8 +24,7 @@ jobs:
     - name: create BUILD folder
       run: |
         mkdir ../build
-        ln -s ../EasyGrblSetup/QLabelClickable.h ../build/QLabelClickable.h
-        ln -s ../EasyGrblSetup/QLabelClickable.h ../QLabelClickable.h
+        ln -s ../EasyGrblSetup/source/QLabelClickable.h ../build/QLabelClickable.h
     - name: where is DEFAULT
       run: pwd; ls -hals
     - name: where is BUILD
