@@ -25,6 +25,7 @@ jobs:
       run: |
         mkdir ../build
         ln -s ../EasyGrblSetup/QLabelClickable.h ../build/QLabelClickable.h
+        ln -s ../EasyGrblSetup/QLabelClickable.h ../QLabelClickable.h
     - name: where is DEFAULT
       run: pwd; ls -hals
     - name: where is BUILD
@@ -33,6 +34,8 @@ jobs:
     - name: qmake
       working-directory: ../build
       run: |
+        ls -hals
+        cat ./QLabelClickable.h
         qmake /home/runner/work/EasyGrblSetup/EasyGrblSetup/EasyGrblSetup.pro
         ls -hals
     - name: make
