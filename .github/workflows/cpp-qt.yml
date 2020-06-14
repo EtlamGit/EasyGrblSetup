@@ -21,6 +21,8 @@ jobs:
         target: 'desktop'
     - name: test home
       run: ls -Rhals /home/runner/
+    - name: where am I
+      run: pwd; ls
     - name: qmake project
       run: qmake -project
     - name: qmake
