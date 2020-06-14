@@ -18,7 +18,7 @@ jobs:
       id: cache-qt
       uses: actions/cache@v2
       with:
-        path: ../Qt
+        path: ~/work/EasyGrblSetup/Qt
         key: ${{ runner.os }}-QtCache
 
     - name: Install Qt
@@ -47,4 +47,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: Ubuntu-18.04 Binary
-        path: /home/runner/work/EasyGrblSetup/build/EasyGrblSetup
+        path: ~/work/EasyGrblSetup/build/EasyGrblSetup
