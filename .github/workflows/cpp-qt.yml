@@ -9,21 +9,18 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     steps:
     - uses: actions/checkout@v2
     - name: Install Qt
       uses: jurplel/install-qt-action@v2
       with:
-        version: '5.12.8'
-        host: 'windows'
+        version: '5.9.5'
+        host: 'linux'
         target: 'desktop'
-        arch: 'win64_msvc2017_64'
     - name: test home
       run: ls -Rhals /home/runner/
-    - name: list qmake
-      run: which qmake
     - name: qmake project
       run: qmake -project
     - name: qmake
