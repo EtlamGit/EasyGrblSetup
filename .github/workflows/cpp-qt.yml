@@ -15,11 +15,11 @@ jobs:
         os: [ubuntu-16.04, ubuntu-18.04, ubuntu-20.04]
         include:
           - os: ubuntu-16.04
-            qt: 5.5.1
+            qtversion: '5.5.1'
           - os: ubuntu-18.04
-            qt: 5.9.5
+            qtversion: '5.9.5'
           - os: ubuntu-20.04
-            qt: 5.12.8
+            qtversion: '5.12.8'
 
     steps:
     - uses: actions/checkout@v2
@@ -29,12 +29,12 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/work/EasyGrblSetup/Qt
-        key: ${{ runner.os }}-QtCache
+        key: ${{ runner.os }}-QtCache-${{ matrix.qtversion }}
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v2
       with:
-        version: '${{ matrix.qt }}'
+        version: ${{ matrix.qtversion }}
         host: 'linux'
         target: 'desktop'
         cached: ${{ steps.cache-qt.outputs.cache-hit }}
