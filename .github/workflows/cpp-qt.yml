@@ -1,4 +1,4 @@
-name: C++ Qt Ubuntu-18.04 CI
+name: C++ Qt Ubuntu CI
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
         os: [ubuntu-16.04, ubuntu-18.04, ubuntu-20.04]
         include:
           - os: ubuntu-16.04
-            qtversion: '5.5'
+            qtversion: '5.5.1'
           - os: ubuntu-18.04
             qtversion: '5.9.5'
           - os: ubuntu-20.04
