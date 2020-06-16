@@ -9,7 +9,17 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-18.04
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-16.04, ubuntu-18.04, ubuntu-20.04]
+        include:
+          - os: ubuntu-16.04
+            qt: 5.5.1
+          - os: ubuntu-18.04
+            qt: 5.9.5
+          - os: ubuntu-20.04
+            qt: 5.12.8
 
     steps:
     - uses: actions/checkout@v2
@@ -24,7 +34,7 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v2
       with:
-        version: '5.9.5'
+        version: '${{ matrix.qt }}'
         host: 'linux'
         target: 'desktop'
         cached: ${{ steps.cache-qt.outputs.cache-hit }}
@@ -46,5 +56,5 @@ jobs:
     - name: Archive build result
       uses: actions/upload-artifact@v2
       with:
-        name: Ubuntu-18.04 Binary
+        name: ${{ matrix.os }} Binary
         path: ~/work/EasyGrblSetup/build/EasyGrblSetup
