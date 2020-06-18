@@ -29,7 +29,7 @@ jobs:
       id: cache-qt
       uses: actions/cache@v2
       with:
-        path: ~/work/EasyGrblSetup/Qt
+        path: ${{ runner.workspace }}/Qt
         key: ${{ runner.os }}-QtCache-${{ matrix.qtversion }}
 
     - name: Install Qt
@@ -44,18 +44,20 @@ jobs:
       run: |
         mkdir ../build
     
+    - name: Environment (Ubuntu-16.04)
+      if: matrix.os == 'ubuntu-16.04'
+      run: echo '::set-env name=LD_LIBRARY_PATH::${{ runner.workspace }}/Qt/5.5/gcc_64/lib'
+
     - name: qmake
       working-directory: ../build
-      run: qmake ../EasyGrblSetup/EasyGrblSetup.pro
-    
+      run: qmake ${{ github.workspace }}/EasyGrblSetup.pro
+          
     - name: make
       working-directory: ../build
-      run: |
-        make
-        ls -hals
+      run: make
     
     - name: Archive build result
       uses: actions/upload-artifact@v2
       with:
         name: ${{ matrix.os }} Binary
-        path: ~/work/EasyGrblSetup/build/EasyGrblSetup
+        path: ${{ runner.workspace }}/build/EasyGrblSetup
